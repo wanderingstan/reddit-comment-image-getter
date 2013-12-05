@@ -37,7 +37,7 @@ class redditPost {
 			preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $comment_body, $match);
 			// print_r($match);
 			if (count($match)>0) {
-				extract_and_download_image($match[0][0], $comment_author."____".$comment_id.".jpg");
+				extract_and_download_image($match[0][0], $comment_id."____".$comment_author.".jpg");
 			}
 		}
 	}
@@ -48,7 +48,7 @@ function extract_and_download_image($url,$filename) {
 	$url_data = parse_url($url);
 	$domain = $url_data['host'];	
 
-	echo "Getting $filename from $url  domain is $domain\n";
+	// echo "Getting $filename from $url  domain is $domain\n";
 
 	if ($domain == "i.imgur.com") {
 		// Imgur: Direct link to image. Easy.
@@ -61,16 +61,21 @@ function extract_and_download_image($url,$filename) {
 		$img_url = "http://i.imgur.com/" . $url_data['path'] . ".jpg";
 	}
 	elseif ($domain == "instagram.com") {
-		echo "Fuck instagram.\n";
+		print "-----------------\n\n\n\n";
+		$img_page_html = file_get_contents($url);
+		// <meta property="og:image" content="http://distilleryimage3.ak.instagram.com/8e78fe2e531611e3abd4129eb955129a_8.jpg" />
+		$pattern = '/\<meta property="og:image" content="([^\"]*\.jpg)/';
+		preg_match($pattern, $img_page_html, $matches, PREG_OFFSET_CAPTURE);
+		$img_url = $matches[1][0];
+		print_r($matches);
+		print "-----------------\n\n\n\n";
 	}
 	elseif ($domain == "twitter.com") {
-		print "-----------------\n\n\n\n";
 		$img_page_html = file_get_contents($url);
 		// https://pbs.twimg.com/media/BavEMwpCIAA8o4N.jpg
 		$pattern = "/https:\/\/pbs\\.twimg\.com\/media\/[^\.]*\.jpg/";
 		preg_match($pattern, $img_page_html, $matches, PREG_OFFSET_CAPTURE);
 		$img_url = $matches[0][0];
-		print_r($matches);
 	}
 	file_put_contents($filename, file_get_contents($img_url));
 }
@@ -80,4 +85,13 @@ $test_post = new redditPost("http://www.reddit.com/r/calligraffiti/comments/1s2g
 
 // http://www.reddit.com/r/calligraffiti/comments/1s2gkh/wotd_stout_124/.json
 // http://www.reddit.com/r/calligraffiti/comments/1s5qai/wotd_shave_125/.json
+
+/*
+
+http://www.imagemagick.org/Usage/montage/
+
+create the montage:
+
+$ montage *.jpg -geometry 150x150+2+2 -tile 2x  montage_geom_size.jpg
+*/
 ?>
