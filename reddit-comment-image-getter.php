@@ -37,16 +37,42 @@ class redditPost {
 			preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $comment_body, $match);
 			// print_r($match);
 			if (count($match)>0) {
-				extract_and_download_image($match[0][0]);
-				//imgur, twitter, instagram
+				extract_and_download_image($match[0][0], $comment_author."____".$comment_id.".jpg");
 			}
 		}
-
 	}
 }
 
-function extract_and_download_image($url) {
+function extract_and_download_image($url,$filename) {
 	echo "Getting image from " . $url . "\n";
+	$url_data = parse_url($url);
+	$domain = $url_data['host'];	
+
+	echo "Getting $filename from $url  domain is $domain\n";
+
+	if ($domain == "i.imgur.com") {
+		// Imgur: Direct link to image. Easy.
+		// file_put_contents($filename, file_get_contents($url));
+		$img_url = "http://i.imgur.com/" . $url_data['path'];
+	}
+	elseif ($domain == "imgur.com") {
+		// Imgur: extract from page
+		// http://imgur.com/udjf8uT --> http://i.imgur.com/udjf8uT.jpg
+		$img_url = "http://i.imgur.com/" . $url_data['path'] . ".jpg";
+	}
+	elseif ($domain == "instagram.com") {
+		echo "Fuck instagram.\n";
+	}
+	elseif ($domain == "twitter.com") {
+		print "-----------------\n\n\n\n";
+		$img_page_html = file_get_contents($url);
+		// https://pbs.twimg.com/media/BavEMwpCIAA8o4N.jpg
+		$pattern = "/https:\/\/pbs\\.twimg\.com\/media\/[^\.]*\.jpg/";
+		preg_match($pattern, $img_page_html, $matches, PREG_OFFSET_CAPTURE);
+		$img_url = $matches[0][0];
+		print_r($matches);
+	}
+	file_put_contents($filename, file_get_contents($img_url));
 }
 
 // $test_post = new redditPost("http://www.reddit.com/r/calligraffiti/comments/1s5qai/wotd_shave_125/.json");
