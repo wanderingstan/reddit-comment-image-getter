@@ -22,7 +22,7 @@ function get_matching_posts($subreddit, $post_title_re, $post_count_max=100, $re
 	$after_post_id="";
 	do {
 		$subreddit_url = "http://reddit.com/r/" . $subreddit . "/";
-		$json_query_url = $subreddit_url.".json?count=" . $post_count_max . "&after=" . $after_post_id;
+		$json_query_url = $subreddit_url.".json?limit=". $post_count_max ."count=" . $post_count_max . "&after=" . $after_post_id;
 		$subreddit_posts_data = json_decode(file_get_contents($json_query_url,false, $context));
 
 		echo "\n\n\n\n\n-------------------------\n";
