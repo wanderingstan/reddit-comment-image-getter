@@ -1,0 +1,7 @@
+*.serialized
+*.serialized2
+calligraphy/*
+calligraffiti/*
+*.data
+*.jpg
+*.txt

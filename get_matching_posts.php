@@ -33,8 +33,8 @@ function get_matching_posts($subreddit, $post_title_re, $post_count_max=100, $re
 			preg_match($post_title_re, $post->data->title, $matches, PREG_OFFSET_CAPTURE);
 			if (count($matches)) {
 
-				$wotd = $matches[1][0];
-				$month_day = $matches[3][0];
+				$wotd = $matches["name"][0];
+				// $month_day = $matches["date"][0];
 				print $post->data->title . " -->" . $wotd . "\n";
 
 				// Append our match information to the post

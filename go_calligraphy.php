@@ -6,10 +6,10 @@ include 'process_all_posts.php';
 $reddit_username = "wanderingstan";
 
 // Subreddit to seach in:
-$subreddit = "calligraffiti";
+$subreddit = "calligraphy";
 
 // But only process posts with titles that match this pattern:
-$post_title_re = '/WotD[^"]*"(?P<name>[^"]*)([ "]*)?([0-9]+\/[0-9]+)?/';
+$post_title_re = '/Word of the day +-[^-]*- ?(?P<name>.*)$/i';
 
 // do it!
 process_all_posts();

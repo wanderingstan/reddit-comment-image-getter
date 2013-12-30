@@ -8,7 +8,7 @@
  * returns
  *     http://distilleryimage6.ak.instagram.com/694252de518311e396e312b3099bf222_8.jpg
  */
-function jpg_url_from_service_url($url) {
+function jpg_url_from_service_url($url ) {
 	$url_data = parse_url($url);
 	$domain = $url_data['host'];	
 
