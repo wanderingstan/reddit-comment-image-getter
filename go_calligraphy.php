@@ -3,7 +3,7 @@ include 'process_all_posts.php';
 
 // Your reddit username
 // (Needed to set user-agent string, per Reddit API: https://github.com/reddit/reddit/wiki/API )
-$reddit_username = "wanderingstan";
+$reddit_username = "YOUR_REDDIT_USERNAME";
 
 // Subreddit to seach in:
 $subreddit = "calligraphy";
